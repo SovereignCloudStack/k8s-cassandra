@@ -1,0 +1,3 @@
+bases:
+- ../../base
+- github.com/SovereignCloudStack/k8s-operator-scylla/base?ref=6d709456288b1a4d341487976bbaad59dd585bcb

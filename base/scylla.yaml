@@ -1,0 +1,82 @@
+## Based on https://github.com/scylladb/scylla-operator/blob/v0.1.9/examples/generic/cluster.yaml
+
+# Role for scylla members.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: scylla-cluster-member
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - patch
+      - watch
+  - apiGroups:
+      - "apps"
+    resources:
+      - statefulsets
+    verbs:
+      - get
+      - list
+      - patch
+      - watch
+  - apiGroups:
+      - scylla.scylladb.com
+    resources:
+      - clusters
+    verbs:
+      - get
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: scylla-cluster-member
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: scylla-cluster-member
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: scylla-cluster-member
+subjects:
+- kind: ServiceAccount
+  name: scylla-cluster-member
+---
+apiVersion: scylla.scylladb.com/v1alpha1
+kind: Cluster
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: scylla-cluster
+spec:
+  version: 4.0.0
+  agentVersion: 2.0.2
+  developerMode: true
+  datacenter:
+    name: default
+    racks:
+      - name: default-1
+        scyllaConfig: "scylla-config"
+        scyllaAgentConfig: "scylla-agent-config"
+        members: 1
+        storage:
+          capacity: 5Gi
+        resources:
+          requests:
+            cpu: 1
+            memory: 500Mi
+          limits:
+            cpu: 1
+            memory: 1Gi
