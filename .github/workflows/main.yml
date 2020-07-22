@@ -61,7 +61,7 @@ jobs:
         resp = session.execute("SELECT * FROM example_data;")
         
         output = json.dumps(resp.current_rows)
-        expected = '[[1, "this is not the 1st data"], [2, "this is the 2nd data"]]'
+        expected = '[[1, "this is the 1st data"], [2, "this is the 2nd data"]]'
         if output != expected:
           print(f"Output '{output}' does not match expected '{expected}'")
           sys.exit(1)
