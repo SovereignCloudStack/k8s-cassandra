@@ -46,6 +46,7 @@ jobs:
         kubectl run -i --restart=Never health-check --rm --image=python:3 --command -- sh -c 'pip install cassandra-driver && python' <<EOF
         from cassandra.cluster import Cluster
         import json
+        import sys
         
         cluster = Cluster(['scylla-cluster-client'])
         session = cluster.connect()
@@ -59,7 +60,11 @@ jobs:
         
         resp = session.execute("SELECT * FROM example_data;")
         
-        assert json.dumps(resp.current_rows) == '[[1, "this is not the 1st data"], [2, "this is the 2nd data"]]'
+        output = json.dumps(resp.current_rows)
+        expected = '[[1, "this is not the 1st data"], [2, "this is the 2nd data"]]'
+        if output != expected:
+          print(f"Output '{output}' does not match expected '{expected}'")
+          sys.exit(1)
         EOF
     - name: Fetch fluxcd logs
       if: ${{ always() }}
