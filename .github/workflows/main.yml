@@ -59,7 +59,7 @@ jobs:
         
         resp = session.execute("SELECT * FROM example_data;")
         
-        assert json.dumps(resp.current_rows) == '[[1, "this is the 1st data"], [2, "this is the 2nd data"]]'
+        assert json.dumps(resp.current_rows) == '[[1, "this is not the 1st data"], [2, "this is the 2nd data"]]'
         EOF
     - name: Fetch fluxcd logs
       if: ${{ always() }}
