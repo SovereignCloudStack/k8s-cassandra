@@ -1,0 +1,25 @@
+#!/bin/bash
+
+kubectl run -i --restart=Never health-check --rm --image=python:3 --command -- sh -c 'pip install cassandra-driver && python' <<EOF
+from cassandra.cluster import Cluster
+import json
+import sys
+
+cluster = Cluster(['scylla-cluster-client'])
+session = cluster.connect()
+
+session.execute("CREATE KEYSPACE IF NOT EXISTS integrationtest WITH REPLICATION={'class': 'NetworkTopologyStrategy', 'default': 1};")
+session.execute('USE integrationtest;')
+session.execute('CREATE TABLE IF NOT EXISTS example_data (id int PRIMARY KEY, data text);')
+
+session.execute("INSERT INTO example_data (id, data) VALUES (1, 'this is the 1st data');")
+session.execute("INSERT INTO example_data (id, data) VALUES (2, 'this is the 2nd data');")
+
+resp = session.execute("SELECT * FROM example_data;")
+
+output = json.dumps(resp.current_rows)
+expected = '[[1, "this is the 1st data"], [2, "this is the 2nd data"]]'
+if output != expected:
+  print(f"Output '{output}' does not match expected '{expected}'")
+  sys.exit(1)
+EOF

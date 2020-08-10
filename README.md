@@ -1,6 +1,6 @@
 # Deployment manifests for Cassandra®/Scylla®
 
-## Attribution
+## Attributions
 
 Cassandra is a trademark of the Apache Software Foundation which is not affiliated with the SCS project.
 
@@ -9,8 +9,7 @@ Scylla is a trademark of the ScyllaDB company which is not affiliated with the S
 ## Repository content
 
 This repository is intended to include all relevant configuration
-and Kubernetes manifests for the deployment of the open source ScyllaDB
-database software inside SCS.
+and Kubernetes manifests for the deployment of the open source ScyllaDB database software inside SCS.
 
 ## Repository layout
 
@@ -23,3 +22,5 @@ environments/clusters.
 In order to ensure that every component inside of SCS behaves as
 expected, there should be simple smoke tests.
 These tests are implemented using GitHub Actions/Workflows.
+
+

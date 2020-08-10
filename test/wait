@@ -1,0 +1,6 @@
+#!/bin/bash
+
+until [[ $(kubectl get clusters.scylla.scylladb.com scylla-cluster '--output=go-template={{index .status "racks" "default-1" "readyMembers"}}') = "1" ]]
+do
+  sleep 1
+done

@@ -1,0 +1,11 @@
+name_path: cassandra
+name_title:
+- Cassandra®
+- Scylla®
+attributions:
+- trademark: Cassandra
+  owner: the Apache Software Foundation
+- trademark: Scylla
+  owner: the ScyllaDB company
+name_description: the open source ScyllaDB database software
+appendix: ""
